@@ -1,7 +1,7 @@
 import { Reset } from "styled-reset";
 import { GlobalStyle } from "./GlobalStyle";
 import Header from "./components/Header";
-import Footer from "./components/Footer";
+// import Footer from "./components/Footer";
 import { Outlet } from "react-router-dom";
 
 const App = () => {
@@ -11,7 +11,7 @@ const App = () => {
       <Reset />
       <Header />
       <Outlet />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };
