@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { COLORS } from "../constants/css/css";
+import { COLORS } from "../css/GlobalStyle";
 
 const Header = () => {
   return (

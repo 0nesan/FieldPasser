@@ -1,11 +1,10 @@
 import styled from "styled-components"
 import { BadmintonIcon, BasketballIcon, FutsalIcon, SoccerIcon, TennisIcon } from "../../constants/Icons/categoryIcons"
-import { COLORS } from "../../constants/css/css"
 import { useState } from 'react'
-import axios from "axios"
+import { COLORS } from "../../css/GlobalStyle"
 
 const MainCategoryBtnBox = () => {
-  const [selectBtnColors, setSelectBtnColors] = useState<CategoryBtnColors>({
+  const [selectBtnColors, setSelectBtnColors] = useState<CATEGORY_BTN_COLORS_TYPE>({
     futsal: COLORS.MainColor,
     soccer: '#00000099',
     basketball: '#00000099',
@@ -21,27 +20,13 @@ const MainCategoryBtnBox = () => {
     return setSelectBtnColors({ ...selectBtnColors, [category]: COLORS.MainColor })
   }
 
-  const BASE_URL = import.meta.env.VITE_BASE_URL
-  const publicApi = axios.create({
-    baseURL: BASE_URL,
-    timeout: 10000,
-  })
-
-  const getMainPostList = async () => {
-    return await publicApi.get(`/search/1?title=&categoryName=&startTime=&endTime=&districtNames=강남구,서초구`).then((res) => {
-      console.log(res.data.data)
-      return res.data.data
-    })
-  }
-
   return (
     <BoardFreeViewWrap>
-      <CategoryBtnWrap>
+      <ul>
         <li>
           <CategoryBtn
             onClick={() => {
               seletBtnColorHandler('futsal')
-              getMainPostList()
             }}
             $textcolor={selectBtnColors.futsal}>
             <FutsalIcon color={selectBtnColors.futsal} size={24} />
@@ -88,7 +73,7 @@ const MainCategoryBtnBox = () => {
             <span>테니스</span>
           </CategoryBtn>
         </li>
-      </CategoryBtnWrap>
+      </ul>
     </BoardFreeViewWrap>
   )
 }
@@ -96,16 +81,15 @@ const MainCategoryBtnBox = () => {
 export default MainCategoryBtnBox
 
 const BoardFreeViewWrap = styled.section`
-
+  ul {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    gap:40px;
+    height:102px;
+  }
 `
 
-const CategoryBtnWrap = styled.ul`
-  display:flex;
-  justify-content: center;
-  align-items: center;
-  gap:40px;
-  height:102px;
-`
 const CategoryBtn = styled.button<{ $textcolor?: string }>`
   display:flex;
   flex-direction: column;

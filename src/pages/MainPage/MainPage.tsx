@@ -1,12 +1,28 @@
 import styled from "styled-components";
-import CategoryBtnBox from "./MainCategoryBtnBox";
-import MainBanner from "./MainBanner";
+import CategoryBtnBox from "../../components/MainPage/MainCategoryBtnBox";
+import MainBanner from "../../components/MainPage/MainBanner";
+import BoardBox from "../../components/Board/BoardBox";
+import { useEffect, useState } from 'react';
+import { getPostList } from "../../api/boardApi";
 
 const MainPage = () => {
+  const [postData, setPostData] = useState<POST_TYPE[]>();
+  const getPostDataFn = async () => {
+    try {
+      setPostData(await getPostList({ categoryName: '풋살장' }))
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  useEffect(() => {
+    getPostDataFn()
+  }, []);
+
   return (
     <Container>
       <MainBanner />
       <CategoryBtnBox />
+      <BoardBox postData={postData} />
     </Container>
   );
 };

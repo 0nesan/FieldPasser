@@ -51,3 +51,7 @@ export const GlobalStyle = createGlobalStyle`
         cursor: pointer;
     }
 `;
+
+export const COLORS = {
+    MainColor: '#5FCA7B'
+}

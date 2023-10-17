@@ -1,4 +1,4 @@
-export const BadmintonIcon = (props: CategoryIconPropsTypes) => {
+export const BadmintonIcon = (props: CATEGORY_ICON_PROPS_TYPES) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
       <path
@@ -9,7 +9,7 @@ export const BadmintonIcon = (props: CategoryIconPropsTypes) => {
   )
 }
 
-export const BasketballIcon = (props: CategoryIconPropsTypes) => {
+export const BasketballIcon = (props: CATEGORY_ICON_PROPS_TYPES) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
       <path
@@ -24,7 +24,7 @@ export const BasketballIcon = (props: CategoryIconPropsTypes) => {
   )
 }
 
-export const FutsalIcon = (props: CategoryIconPropsTypes) => {
+export const FutsalIcon = (props: CATEGORY_ICON_PROPS_TYPES) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
       <path
@@ -35,7 +35,7 @@ export const FutsalIcon = (props: CategoryIconPropsTypes) => {
   )
 }
 
-export const SoccerIcon = (props: CategoryIconPropsTypes) => {
+export const SoccerIcon = (props: CATEGORY_ICON_PROPS_TYPES) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
       <path
@@ -46,7 +46,7 @@ export const SoccerIcon = (props: CategoryIconPropsTypes) => {
   )
 }
 
-export const TennisIcon = (props: CategoryIconPropsTypes) => {
+export const TennisIcon = (props: CATEGORY_ICON_PROPS_TYPES) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
       <path
