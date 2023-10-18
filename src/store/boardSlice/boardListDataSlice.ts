@@ -4,7 +4,7 @@ import { getPostList } from "../../api/boardApi";
 
 export const fetchBoardList = createAsyncThunk(
   'board/fetchBoardListStatus',
-  async (params : POST_LIST_PARAMS_TYPES, thunkAPI) => {
+  async (params : GET_BOARD_LIST_PARAMS_TYPES, thunkAPI) => {
     try {
       const response = await getPostList(params);
       return [response, params]
@@ -17,7 +17,7 @@ export const fetchBoardList = createAsyncThunk(
 interface boardListDataSliceTypes {
   boardData : POST_TYPE[]
   status : string 
-  params : POST_LIST_PARAMS_TYPES
+  params : GET_BOARD_LIST_PARAMS_TYPES
 }
 
 const initialState : boardListDataSliceTypes = {

@@ -17,11 +17,13 @@ const MainSearchBox = () => {
         </MainSearchBoxText>
         <SearchToggleIcon />
       </div>
-      {isModalOpen && (
-        <ModalPortal>
-          <SearchPopup />
-        </ModalPortal>
-      )}
+      {
+        isModalOpen && (
+          <ModalPortal>
+            <SearchPopup onClose={() => setIsModalOpen(props => !props)} />
+          </ModalPortal>
+        )
+      }
     </MainSearchBoxWrap>
   )
 }

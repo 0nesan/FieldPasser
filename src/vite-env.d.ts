@@ -36,13 +36,17 @@ interface POST_TYPE {
   wishCount: number
   likeBoard: boolean
 }
-interface POST_LIST_PARAMS_TYPES {
-  params : {
-    title?:string
-    categoryName?: string
-    districtName?: string
-    startTime?:string
-    endTime?:string
-  }
+interface GET_BOARD_LIST_PARAMS_TYPES {
+  params : BOARD_PARAMS_TYPE
   page : number
+}
+
+interface BOARD_PARAMS_TYPE {
+  title?:string
+  categoryName?: string
+  districtName?: string
+  startTime?:string
+  endTime?:string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [props:string] : any;
 }
