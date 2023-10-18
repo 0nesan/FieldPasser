@@ -18,20 +18,20 @@ const BoardItem: React.FC<BoardItemsProps> = ({ list }) => {
       $blind={list.transactionStatus}
       onClick={() => navigate(`/board-details/${list.boardId}`)}
     >
-      <div className="imgae_wrap">
+      <ImageBox>
         <img
           src={list.imageUrl ? list.imageUrl : randomImageUrl}
           // onError={(e) => handleImgError(e, list.categoryName, list.boardId)}
           alt="이미지"
         />
-      </div>
-      <div className="info_wrap">
-        <p className="title">{list.title}</p>
-        <p className="price">{list.price.toLocaleString()} 원</p>
-        <p className="date">
+      </ImageBox>
+      <InfoBox>
+        <p className="info-title">{list.title}</p>
+        <p className='info-price'>{list.price.toLocaleString()} 원</p>
+        <p className='info-district'>
           {list.districtName} {date}
         </p>
-        <p className="view_like">
+        <p className='info-etc-section'>
           <span>조회수</span>
           <span>{list.viewCount}</span>
           <span>
@@ -39,7 +39,7 @@ const BoardItem: React.FC<BoardItemsProps> = ({ list }) => {
           </span>
           <span>{list.wishCount}</span>
         </p>
-      </div>
+      </InfoBox>
       {list.transactionStatus === '판매 완료' && <div className="sold_out">판매 완료</div>}
     </BoxItemWrap>
   )
@@ -48,5 +48,56 @@ const BoardItem: React.FC<BoardItemsProps> = ({ list }) => {
 export default BoardItem
 
 const BoxItemWrap = styled.li<{ $blind: string | null }>`
+  width:calc(100% / 3);
+  padding:10px;
+`
+const ImageBox = styled.figure`
+  width:100%;
+  height:0;
+  padding-bottom:100%;
+  margin-bottom:20px;
+  position:relative;
+  border-radius: 10px;
+  overflow:hidden;
 
+  img {
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+  }
+`
+const InfoBox = styled.div`
+  display:flex;
+  flex-direction: column;
+  gap:8px;
+  margin-bottom:20px;
+
+  p {
+    color:#000;
+    font-weight: 400;
+  }
+
+  .info-price {
+    font-weight: 900;
+  }
+
+  .info-district {
+    font-size:14px;
+  }
+
+  .info-etc-section {
+    display:flex;
+    gap:5px;
+    font-size:14px;
+
+    span {
+      color:#aaa;
+    }
+
+    span:nth-child(3){
+      margin-left:5px;
+    }
+  }
 `

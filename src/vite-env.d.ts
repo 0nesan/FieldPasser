@@ -37,9 +37,12 @@ interface POST_TYPE {
   likeBoard: boolean
 }
 interface POST_LIST_PARAMS_TYPES {
-  title?:string
-  categoryName?: string
-  districtName?: string
-  startTime?:string
-  endTime?:string
+  params : {
+    title?:string
+    categoryName?: string
+    districtName?: string
+    startTime?:string
+    endTime?:string
+  }
+  page : number
 }

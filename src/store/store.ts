@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
-import counterReducer from './counterSlice'
+import boardListDataSlice from './slice/boardListDataSlice'
 
 export const store = configureStore({
     reducer: {
-        counter: counterReducer,
-    }
+        boardList: boardListDataSlice,
+    },
 })
 
 export type RootState = ReturnType<typeof store.getState>

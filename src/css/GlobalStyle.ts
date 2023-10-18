@@ -20,7 +20,7 @@ export const GlobalStyle = createGlobalStyle`
         box-sizing: border-box;
         line-height: 1;
         color: #3a3a3a;
-        font-family: 'Pretendard-Regular', 'Noto Sans KR', sans-serif;
+        font-family: 'Pretendard-Regular', 'Noto Sans KR', sans-serif !important;
     }
 
     main , header, footer  {
