@@ -7,16 +7,23 @@ export const fetchBoardList = createAsyncThunk(
   async (params : POST_LIST_PARAMS_TYPES, thunkAPI) => {
     try {
       const response = await getPostList(params);
-      return [response, params.page]
+      return [response, params]
     }catch (err) {
       return thunkAPI.rejectWithValue(err)
     }
   }
 )
 
-const initialState = {
+interface boardListDataSliceTypes {
+  boardData : POST_TYPE[]
+  status : string 
+  params : POST_LIST_PARAMS_TYPES
+}
+
+const initialState : boardListDataSliceTypes = {
   boardData : [],
-  status: 'Failed'
+  status: 'idle',
+  params: {params:{}, page:1},
 }
 
 const mainBoardListSlice = createSlice({
@@ -28,7 +35,8 @@ const mainBoardListSlice = createSlice({
       state.status = 'Loading'
     })
     builder.addCase(fetchBoardList.fulfilled, (state, action) => {
-      action.payload[1] === 1 ? state.boardData = action.payload[0] : state.boardData = [...state.boardData].concat(action.payload[0])
+      action.payload[1].page === 1 ? state.boardData = action.payload[0] : state.boardData = [...state.boardData].concat(action.payload[0])
+      state.params = action.payload[1]
       state.status = 'Complete'
     })
     builder.addCase(fetchBoardList.rejected, (state) => {

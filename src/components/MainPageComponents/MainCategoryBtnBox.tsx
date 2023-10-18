@@ -1,10 +1,10 @@
 import styled from "styled-components"
 import { BadmintonIcon, BasketballIcon, FutsalIcon, SoccerIcon, TennisIcon } from "../../constants/Icons/categoryIcons"
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { COLORS } from "../../css/GlobalStyle"
-import { fetchBoardList } from "../../store/slice/boardListDataSlice"
-import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, RootState } from '../../store/store'
+import { fetchBoardList } from "../../store/boardSlice/boardListDataSlice"
+import { useDispatch } from "react-redux"
+import { AppDispatch } from '../../store/store'
 
 const MainCategoryBtnBox = () => {
   const dispatch: AppDispatch = useDispatch()
@@ -17,28 +17,24 @@ const MainCategoryBtnBox = () => {
     tennis: '#00000099'
   });
 
-  const seletBtnColorHandler = (category: string) => {
-    for (const key in selectBtnColors) {
-      selectBtnColors[key] = '#00000099'
-    }
-
+  const selectBtnColorHandler = (category: string) => {
+    for (const key in selectBtnColors) selectBtnColors[key] = '#00000099'
     return setSelectBtnColors({ ...selectBtnColors, [category]: COLORS.MainColor })
   }
 
-  const mainBoardListData = useSelector((state: RootState) => state.boardList.boardData)
   useEffect(() => {
-    if (mainBoardListData.length === 0) {
+    if (selectBtnColors.futsal === COLORS.MainColor) {
       dispatch(fetchBoardList({ params: { categoryName: '풋살장' }, page: 1 }))
     }
-  }, [mainBoardListData.length, dispatch])
+  }, [selectBtnColors.futsal, dispatch])
 
   return (
-    <BoardFreeViewWrap>
+    <CategoryBtnBox>
       <ul>
         <li>
           <CategoryBtn
             onClick={() => {
-              seletBtnColorHandler('futsal')
+              selectBtnColorHandler('futsal')
               dispatch(fetchBoardList({ params: { categoryName: '풋살장' }, page: 1 }))
             }}
             $textcolor={selectBtnColors.futsal}>
@@ -49,7 +45,7 @@ const MainCategoryBtnBox = () => {
         <li>
           <CategoryBtn
             onClick={() => {
-              seletBtnColorHandler('soccer')
+              selectBtnColorHandler('soccer')
               dispatch(fetchBoardList({ params: { categoryName: '축구장' }, page: 1 }))
             }}
             $textcolor={selectBtnColors.soccer}>
@@ -60,7 +56,7 @@ const MainCategoryBtnBox = () => {
         <li>
           <CategoryBtn
             onClick={() => {
-              seletBtnColorHandler('basketball')
+              selectBtnColorHandler('basketball')
               dispatch(fetchBoardList({ params: { categoryName: '농구장' }, page: 1 }))
             }}
             $textcolor={selectBtnColors.basketball}>
@@ -71,7 +67,7 @@ const MainCategoryBtnBox = () => {
         <li>
           <CategoryBtn
             onClick={() => {
-              seletBtnColorHandler('badminton')
+              selectBtnColorHandler('badminton')
               dispatch(fetchBoardList({ params: { categoryName: '배드민턴장' }, page: 1 }))
             }}
             $textcolor={selectBtnColors.badminton}>
@@ -82,7 +78,7 @@ const MainCategoryBtnBox = () => {
         <li>
           <CategoryBtn
             onClick={() => {
-              seletBtnColorHandler('tennis')
+              selectBtnColorHandler('tennis')
               dispatch(fetchBoardList({ params: { categoryName: '테니스장' }, page: 1 }))
             }}
             $textcolor={selectBtnColors.tennis}>
@@ -91,13 +87,13 @@ const MainCategoryBtnBox = () => {
           </CategoryBtn>
         </li>
       </ul>
-    </BoardFreeViewWrap>
+    </CategoryBtnBox>
   )
 }
 
 export default MainCategoryBtnBox
 
-const BoardFreeViewWrap = styled.section`
+const CategoryBtnBox = styled.section`
   ul {
     display:flex;
     justify-content: center;
