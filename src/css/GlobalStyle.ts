@@ -50,8 +50,12 @@ export const GlobalStyle = createGlobalStyle`
         border:none;
         cursor: pointer;
     }
+
+    .non-scroll {
+        overflow:hidden;
+    }
 `;
 
 export const COLORS = {
-    MainColor: '#5FCA7B'
-}
+  MainColor: "#5FCA7B",
+};

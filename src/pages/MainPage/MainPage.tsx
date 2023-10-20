@@ -23,5 +23,3 @@ const Container = styled.main`
   margin: auto;
   max-width: 1024px;
 `;
-
-

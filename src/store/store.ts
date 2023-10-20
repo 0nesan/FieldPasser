@@ -1,11 +1,13 @@
-import { configureStore } from '@reduxjs/toolkit'
-import boardListDataSlice from './boardSlice/boardListDataSlice'
+import { configureStore } from "@reduxjs/toolkit";
+import boardListDataSlice from "./boardListDataSlice";
+import modalStateSlice from "./modalStateSlice";
 
 export const store = configureStore({
-    reducer: {
-        boardList: boardListDataSlice,
-    },
-})
+  reducer: {
+    boardList: boardListDataSlice,
+    modalState: modalStateSlice,
+  },
+});
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
