@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import ModalPortal from "./Portal";
-import SearchPopup from "./components/SearchPopupComponent/SearchPopupBox";
+import SearchPopup from "./components/SearchPopupComponents/SearchPopupBox";
 import { useEffect } from "react";
 
 const App = () => {
@@ -22,7 +22,6 @@ const App = () => {
       <Header />
       <Outlet />
       <ModalPortal>{modalState.modalState.searchModal && <SearchPopup />}</ModalPortal>
-      {/* 모달 children 자체를 redux에 넣는걸 고려 해보는 것을 추천 */}
     </>
   );
 };
