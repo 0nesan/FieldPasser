@@ -1,18 +1,26 @@
+import styled from "styled-components";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { modalToggle } from "../../store/modalStateSlice";
-import styled from "styled-components";
 import { SearchConstans } from "../../constants/SearchContans";
 import { COLORS } from "../../css/GlobalStyle";
 import { SearchIcon } from "../../constants/Icons/sarchIcons";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import SearchFormDatePicker from "./SearchFormDate";
 import { ko } from "date-fns/esm/locale";
+import SearchFormDatePicker from "./SearchFormDate";
+import { useState } from "react";
 
 const SearchPopup = () => {
   const { control, register, handleSubmit, watch } = useForm();
   const dispatch = useDispatch();
+  const [checkDate, setCheckDate] = useState({
+    startDate: false,
+    endDate: false,
+    openDstrictBox: false,
+    dstricChk: 0,
+  });
 
   const onSubmit: SubmitHandler<BOARD_PARAMS_TYPE> = (data: BOARD_PARAMS_TYPE) => {
     for (const x of SearchConstans.districtName) if (data[x] === true) data.districtName += `,${x}`;
@@ -20,34 +28,44 @@ const SearchPopup = () => {
     for (const x of SearchConstans.districtName) delete data[x];
   };
 
+  console.log(watch());
   return (
     <SearchPopupWrap>
       <SearchForm onSubmit={handleSubmit(onSubmit)}>
         <CloseBtn onClick={() => dispatch(modalToggle("searchModal"))}>닫기</CloseBtn>
 
         <SearchFormTitle>
-          <p>찾는 구장을 검색해주세요</p>
+          <p style={{ color: watch("title") ? "#000" : "" }}>찾는 구장을 검색해주세요</p>
           <div>
             <SearchIcon size={16} color="#3a3a3a" />
             <input placeholder="ex) 보라매 공원" {...register("title")} />
           </div>
         </SearchFormTitle>
 
-        <SearchFormDate $starttime={watch("startTime")} $endtime={watch("endTime")}>
+        <SearchFormDate
+          $startdate={checkDate.startDate}
+          $enddate={checkDate.endDate}
+          $starttime={watch("startTime")}
+          $endtime={watch("endTime")}
+        >
           <div>
-            <p>날짜</p>
+            <p style={{ color: checkDate.startDate || checkDate.endDate ? "#000" : "" }}>날짜</p>
             <Controller
               control={control}
-              name="startTime"
+              name="startDate"
               defaultValue={new Date()}
               render={({ field }) => (
                 <DatePicker
-                  onChange={(date: Date) => field.onChange(date)}
+                  onChange={(date: Date) => {
+                    field.onChange(date);
+                    setCheckDate((v) => ({ ...v, startDate: true }));
+                  }}
                   locale={ko}
                   selected={field.value}
                   customInput={<SearchFormDatePicker onClick={() => {}} placeholder={field.value} />}
                   placeholderText={field.value}
                   dateFormat="dd.MM"
+                  maxDate={watch("endDate")}
                   wrapperClassName="start-date"
                   shouldCloseOnSelect={false}
                 />
@@ -55,17 +73,20 @@ const SearchPopup = () => {
             />
             <Controller
               control={control}
-              name="endTime"
+              name="endDate"
               defaultValue={new Date()}
               render={({ field }) => (
                 <DatePicker
-                  onChange={(date: Date) => field.onChange(date)}
+                  onChange={(date: Date) => {
+                    field.onChange(date);
+                    setCheckDate((v) => ({ ...v, endDate: true }));
+                  }}
                   locale={ko}
                   selected={field.value}
                   customInput={<SearchFormDatePicker onClick={() => {}} placeholder={field.value} />}
                   placeholderText={field.value}
                   dateFormat="dd.MM"
-                  minDate={watch("startTime")}
+                  minDate={watch("startDate")}
                   wrapperClassName="end-date"
                   shouldCloseOnSelect={false}
                 />
@@ -74,23 +95,55 @@ const SearchPopup = () => {
           </div>
           <div>
             <p>시간</p>
+            <div
+              className="form-time-wrap"
+              onClick={() => {
+                console.log(watch("startDate"), watch("endDate"), watch("startDate") === watch("endDate"));
+              }}
+            >
+              <input type="time" id="start-time" {...register("startTime")} />
+              <label htmlFor="start-time">{watch("startTime") || "--:--"}</label>
+              <p>시 ~</p>
+              <input type="time" id="end-time" {...register("endTime")} />
+              <label htmlFor="end-time">{watch("endTime") || "--:--"}</label>
+              <p>시</p>
+            </div>
           </div>
         </SearchFormDate>
 
         <SearchFormDistrict>
-          <p aria-label="지역선택 토글버튼" role="button">
+          <p
+            aria-label="지역선택 토글버튼"
+            role="button"
+            onClick={() => setCheckDate((obj) => ({ ...obj, openDstrictBox: !obj.openDstrictBox }))}
+            style={{ color: checkDate.dstricChk > 0 ? "#000" : "" }}
+          >
             지역을 선택해주세요
           </p>
-          <div>
-            {SearchConstans.districtName.map((name) => {
-              return (
-                <button type="button" key={name}>
-                  <input type="checkbox" id={name} {...register(name)} />
-                  <label htmlFor={name}>{name}</label>
-                </button>
-              );
-            })}
-          </div>
+          {checkDate.openDstrictBox && (
+            <div>
+              {SearchConstans.districtName.map((name) => {
+                return (
+                  <button type="button" key={name}>
+                    <input
+                      type="checkbox"
+                      id={name}
+                      {...register(name)}
+                      onClick={(e) => {
+                        const chk = e.currentTarget.checked;
+                        if (checkDate.dstricChk > 4) {
+                          alert("지역은 최대 5개까지 선택 가능합니다.");
+                          return e.preventDefault();
+                        }
+                        setCheckDate((obj) => ({ ...obj, dstricChk: chk ? obj.dstricChk++ : obj.dstricChk-- }));
+                      }}
+                    />
+                    <label htmlFor={name}>{name}</label>
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </SearchFormDistrict>
 
         <button type="submit">제출 test</button>
@@ -129,7 +182,6 @@ const SearchForm = styled.form`
     border-radius: 15px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 4px;
     padding: 20px;
-    min-height: 120px;
 
     & > p {
       color: #aaaaaa;
@@ -163,6 +215,8 @@ const SearchForm = styled.form`
 `;
 
 const SearchFormTitle = styled.div`
+  min-height: 120px;
+
   & > div {
     position: relative;
 
@@ -190,7 +244,7 @@ const SearchFormTitle = styled.div`
   }
 `;
 
-const SearchFormDate = styled.div<{ $starttime: Date; $endtime: Date }>`
+const SearchFormDate = styled.div<{ $startdate: boolean; $enddate: boolean; $starttime: string; $endtime: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -198,7 +252,10 @@ const SearchFormDate = styled.div<{ $starttime: Date; $endtime: Date }>`
 
   & > div {
     width: 50%;
+    display: flex;
+    justify-content: space-between;
     position: relative;
+    flex-direction: column;
 
     .start-date {
       position: absolute;
@@ -216,9 +273,9 @@ const SearchFormDate = styled.div<{ $starttime: Date; $endtime: Date }>`
       }
 
       label {
-        background-color: ${(props) => (props.$starttime ? COLORS.MainColor : "")};
-        border: ${(props) => (props.$starttime ? "none" : "")};
-        color: ${(props) => (props.$starttime ? "#fff" : "")};
+        background-color: ${(props) => (props.$startdate ? COLORS.MainColor : "")};
+        border: ${(props) => (props.$startdate ? "none" : "")};
+        color: ${(props) => (props.$startdate ? "#fff" : "")};
       }
     }
 
@@ -228,9 +285,9 @@ const SearchFormDate = styled.div<{ $starttime: Date; $endtime: Date }>`
       top: 13px;
 
       label {
-        background-color: ${(props) => (props.$endtime ? COLORS.MainColor : "")};
-        border: ${(props) => (props.$endtime ? "none" : "")};
-        color: ${(props) => (props.$endtime ? "#fff" : "")};
+        background-color: ${(props) => (props.$enddate ? COLORS.MainColor : "")};
+        border: ${(props) => (props.$enddate ? "none" : "")};
+        color: ${(props) => (props.$enddate ? "#fff" : "")};
       }
     }
 
@@ -327,10 +384,79 @@ const SearchFormDate = styled.div<{ $starttime: Date; $endtime: Date }>`
     .react-datepicker__header {
       background-color: #fff;
     }
+
+    .react-datepicker__day:focus-visible,
+    react-datepicker__day--selected:focus-visible {
+      border: none;
+      outline: none;
+    }
+
+    .form-time-wrap {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      padding-right: 20px;
+      font-size: 12px;
+      gap: 5px;
+      top: 13px;
+      right: 0;
+
+      input[type="time"] {
+        position: absolute;
+        background: rgba(0, 0, 0, 0);
+        width: 63px;
+        height: 100%;
+        border: none;
+        opacity: 0;
+      }
+
+      input[type="time"]:nth-child(1) {
+        left: 0;
+      }
+
+      input[type="time"]:nth-child(1) + label {
+        background-color: ${(props) => (props.$starttime ? COLORS.MainColor : "")};
+        border: ${(props) => (props.$starttime ? "none" : "")};
+        color: ${(props) => (props.$starttime ? "#fff" : "")};
+      }
+
+      input[type="time"]:nth-child(4) {
+        right: 37px;
+      }
+
+      input[type="time"]:nth-child(4) + label {
+        background-color: ${(props) => (props.$endtime ? COLORS.MainColor : "")};
+        border: ${(props) => (props.$endtime ? "none" : "")};
+        color: ${(props) => (props.$endtime ? "#fff" : "")};
+      }
+
+      input[type="time"]::-webkit-inner-spin-button {
+        display: none;
+      }
+      input[type="time"]::-webkit-calendar-picker-indicator {
+        opacity: 0;
+        width: 100%;
+      }
+
+      label {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 60px;
+        height: 30px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        font-size: 13px;
+      }
+    }
   }
 `;
 
 const SearchFormDistrict = styled.div`
+  & > p {
+    cursor: pointer;
+  }
+
   div {
     display: flex;
     justify-content: center;

@@ -5,7 +5,7 @@ const SearchFormDatePicker = React.forwardRef<HTMLLabelElement, { onClick: () =>
   const currentDate = new Date(props.placeholder.toISOString());
   const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
   const day = currentDate.getDate().toString().padStart(2, "0");
-  const formattedDate = `${month}/${day}`;
+  const formattedDate = `${month}.${day}`;
 
   return (
     <div>

@@ -53,7 +53,6 @@ const MainCategoryBtnBox = () => {
           >
             <SoccerIcon color={selectBtnColors.soccer} size={24} />
             <span>축구</span>
-            <span>dd</span>
           </CategoryBtn>
         </li>
         <li>
