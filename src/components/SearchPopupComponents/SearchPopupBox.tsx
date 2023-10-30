@@ -2,7 +2,7 @@ import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { useForm, SubmitHandler, Controller, useFieldArray } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { modalToggle } from "../../store/modalStateSlice";
 import { SearchConstans } from "../../constants/SearchContans";
@@ -13,22 +13,28 @@ import SearchFormDatePicker from "./SearchFormDate";
 import { useState } from "react";
 
 const SearchPopup = () => {
-  const { control, register, handleSubmit, watch } = useForm();
   const dispatch = useDispatch();
+  const { control, register, handleSubmit, watch, reset } = useForm();
+  useFieldArray({
+    control,
+    name: "districtNames",
+  });
+
   const [checkDate, setCheckDate] = useState({
     startDate: false,
     endDate: false,
-    openDstrictBox: false,
-    dstricChk: 0,
   });
+  const [openDistrictBox, setOpenDistrictBox] = useState(false);
 
   const onSubmit: SubmitHandler<BOARD_PARAMS_TYPE> = (data: BOARD_PARAMS_TYPE) => {
-    for (const x of SearchConstans.districtName) if (data[x] === true) data.districtName += `,${x}`;
-    data.districtName = data.districtName?.slice(10);
-    for (const x of SearchConstans.districtName) delete data[x];
+    data.districtNames = data.districtNames.join(",");
+    if (data.title?.trim() === "") data.title = "";
+    if (!checkDate.startDate && !checkDate.endDate) (data.startDate = ""), (data.endDate = "");
+    if (data.startTime || (data.endTime && !(data.startTime && data.endTime))) return alert("시간을 확인하세요.");
   };
 
   console.log(watch());
+
   return (
     <SearchPopupWrap>
       <SearchForm onSubmit={handleSubmit(onSubmit)}>
@@ -59,6 +65,7 @@ const SearchPopup = () => {
                   onChange={(date: Date) => {
                     field.onChange(date);
                     setCheckDate((v) => ({ ...v, startDate: true }));
+                    reset((formValues) => ({ ...formValues, startTime: "", endTime: "" }));
                   }}
                   locale={ko}
                   selected={field.value}
@@ -80,6 +87,7 @@ const SearchPopup = () => {
                   onChange={(date: Date) => {
                     field.onChange(date);
                     setCheckDate((v) => ({ ...v, endDate: true }));
+                    reset((formValues) => ({ ...formValues, startTime: "", endTime: "" }));
                   }}
                   locale={ko}
                   selected={field.value}
@@ -94,17 +102,17 @@ const SearchPopup = () => {
             />
           </div>
           <div>
-            <p>시간</p>
+            <p style={{ color: watch("startTime") && watch("endTime") ? "#000" : "" }}>시간</p>
             <div
               className="form-time-wrap"
               onClick={() => {
-                console.log(watch("startDate"), watch("endDate"), watch("startDate") === watch("endDate"));
+                if (watch("startDate").toISOString() !== watch("endDate").toISOString()) alert("동일한 날짜에만 시간 조회가 가능합니다.");
               }}
             >
-              <input type="time" id="start-time" {...register("startTime")} />
+              <input type="time" id="start-time" {...register("startTime")} max={watch("endTime")} />
               <label htmlFor="start-time">{watch("startTime") || "--:--"}</label>
               <p>시 ~</p>
-              <input type="time" id="end-time" {...register("endTime")} />
+              <input type="time" id="end-time" {...register("endTime")} min={watch("startTime")} />
               <label htmlFor="end-time">{watch("endTime") || "--:--"}</label>
               <p>시</p>
             </div>
@@ -115,29 +123,26 @@ const SearchPopup = () => {
           <p
             aria-label="지역선택 토글버튼"
             role="button"
-            onClick={() => setCheckDate((obj) => ({ ...obj, openDstrictBox: !obj.openDstrictBox }))}
-            style={{ color: checkDate.dstricChk > 0 ? "#000" : "" }}
+            onClick={() => setOpenDistrictBox((state) => !state)}
+            style={{ color: watch("districtNames")?.length > 0 ? "#000" : "" }}
           >
             지역을 선택해주세요
           </p>
-          {checkDate.openDstrictBox && (
+          {openDistrictBox && (
             <div>
-              {SearchConstans.districtName.map((name) => {
+              {SearchConstans.districtName.map((name, idx) => {
                 return (
-                  <button type="button" key={name}>
-                    <input
-                      type="checkbox"
-                      id={name}
-                      {...register(name)}
-                      onClick={(e) => {
-                        const chk = e.currentTarget.checked;
-                        if (checkDate.dstricChk > 4) {
-                          alert("지역은 최대 5개까지 선택 가능합니다.");
-                          return e.preventDefault();
-                        }
-                        setCheckDate((obj) => ({ ...obj, dstricChk: chk ? obj.dstricChk++ : obj.dstricChk-- }));
-                      }}
-                    />
+                  <button
+                    type="button"
+                    key={idx}
+                    onClick={(e) => {
+                      if (watch("districtNames").length > 4 && watch("districtNames").indexOf(name) === -1) {
+                        e.preventDefault();
+                        alert("지역은 최대 5개 선택 가능합니다.");
+                      }
+                    }}
+                  >
+                    <input type="checkbox" id={name} value={name} {...register(`districtNames`)} />
                     <label htmlFor={name}>{name}</label>
                   </button>
                 );
@@ -146,7 +151,16 @@ const SearchPopup = () => {
           )}
         </SearchFormDistrict>
 
-        <button type="submit">제출 test</button>
+        <button
+          type="button"
+          onClick={() => {
+            reset({ startDate: new Date(), endDate: new Date() });
+            setCheckDate({ startDate: false, endDate: false });
+          }}
+        >
+          초기화
+        </button>
+        <button type="submit">검색하기</button>
       </SearchForm>
     </SearchPopupWrap>
   );
