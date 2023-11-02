@@ -9,13 +9,13 @@ import { COLORS } from "../../css/GlobalStyle";
 
 const BoardBox = () => {
   const dispatch: AppDispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const location = useLocation();
   const path = location.pathname;
 
   const mainBoardListData = useSelector((state: RootState) => state.boardList.boardData);
   const mainBoardListStatus = useSelector((state: RootState) => state.boardList.status);
-  const mainBoardListParams = useSelector((state: RootState) => state.boardList.params);
+  // const mainBoardListParams = useSelector((state: RootState) => state.boardList.params);
 
   useEffect(() => {
     if (mainBoardListStatus === "idle" && path === "/") {
@@ -32,24 +32,6 @@ const BoardBox = () => {
               <BoardItem list={item} key={idx} />
             ))}
           </BoardListWrap>
-          {path === "/" && mainBoardListData.length > 9 && (
-            <MoreBtn
-              onClick={() => {
-                dispatch(
-                  fetchBoardList({
-                    params: {
-                      categoryName: mainBoardListParams.params.categoryName,
-                    },
-                    page: 1,
-                  })
-                );
-                navigate("/board");
-                window.scrollTo(0, 0);
-              }}
-            >
-              더보기
-            </MoreBtn>
-          )}
         </>
       ) : (
         <ErrorComponent>게시글이 없습니다.</ErrorComponent>
@@ -70,15 +52,16 @@ const BoardListWrap = styled.ul<{ $pathname: string }>`
   margin-right: -10px;
   max-height: ${(props) => (props.$pathname === "/" ? "60%" : "100%")};
   overflow: hidden;
+  cursor: pointer;
 `;
 
 const ErrorComponent = styled.section``;
 
-const MoreBtn = styled.button`
-  margin: 0 auto;
-  padding: 10px 20px;
-  font-size: 16px;
-  color: #fff;
-  background-color: ${COLORS.MainColor};
-  border-radius: 10px;
-`;
+// const MoreBtn = styled.button`
+//   margin: 0 auto;
+//   padding: 10px 20px;
+//   font-size: 16px;
+//   color: #fff;
+//   background-color: ${COLORS.MainColor};
+//   border-radius: 10px;
+// `;

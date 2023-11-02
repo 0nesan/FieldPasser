@@ -11,9 +11,14 @@ import { SearchIcon } from "../../constants/Icons/sarchIcons";
 import { ko } from "date-fns/esm/locale";
 import SearchFormDatePicker from "./SearchFormDate";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { fetchBoardList } from "../../store/boardListDataSlice";
+import { AppDispatch } from "../../store/store";
 
 const SearchPopup = () => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { control, register, handleSubmit, watch, reset } = useForm();
   useFieldArray({
     control,
@@ -31,10 +36,12 @@ const SearchPopup = () => {
     if (data.title?.trim() === "") data.title = "";
     if (!checkDate.startDate && !checkDate.endDate) (data.startDate = ""), (data.endDate = "");
     if (data.startTime || (data.endTime && !(data.startTime && data.endTime))) return alert("시간을 확인하세요.");
+
+    dispatch(fetchBoardList({ params: data, page: 1 }));
+    navigate("/board");
   };
 
   console.log(watch());
-
   return (
     <SearchPopupWrap>
       <SearchForm onSubmit={handleSubmit(onSubmit)}>
@@ -154,7 +161,7 @@ const SearchPopup = () => {
         <button
           type="button"
           onClick={() => {
-            reset({ startDate: new Date(), endDate: new Date() });
+            reset({ districtNames: [], startDate: new Date(), endDate: new Date(), title: "", startTime: "", endTime: "" });
             setCheckDate({ startDate: false, endDate: false });
           }}
         >
