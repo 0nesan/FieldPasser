@@ -32,16 +32,28 @@ const SearchPopup = () => {
   const [openDistrictBox, setOpenDistrictBox] = useState(false);
 
   const onSubmit: SubmitHandler<BOARD_PARAMS_TYPE> = (data: BOARD_PARAMS_TYPE) => {
+    // 지역 배열 join
     data.districtNames = data.districtNames.join(",");
+    // title 공백 제거
     if (data.title?.trim() === "") data.title = "";
-    if (!checkDate.startDate && !checkDate.endDate) (data.startDate = ""), (data.endDate = "");
-    if (data.startTime || (data.endTime && !(data.startTime && data.endTime))) return alert("시간을 확인하세요.");
+    // 날짜 변경 안 했을시 초기화
+    if (!checkDate.startDate && !checkDate.endDate) (data.startTime = ""), (data.endTime = "");
+    else if (data.startDate && data.endDate) {
+      // 날짜 api 요구 format으로 변경
+      data.startTime = new Date(data.startDate).toISOString().substring(0, 10) + "T" + (data.startTime || "00:00") + ":00";
+      data.endTime = new Date(data.endDate).toISOString().substring(0, 10) + "T" + (data.endTime || "23:59") + ":59";
+    }
+    // 시간 선택 둘 중 하나가 없을시 확인 alert
+    if ((data.startTime && !data.endTime) || (!data.startTime && data.endTime)) return alert("시간을 확인하세요.");
+
+    // 넘길 필요 없는 date값 초기화
+    (data.startDate = ""), (data.endDate = "");
 
     dispatch(fetchBoardList({ params: data, page: 1 }));
     navigate("/board");
   };
 
-  console.log(watch());
+  // console.log(watch());
   return (
     <SearchPopupWrap>
       <SearchForm onSubmit={handleSubmit(onSubmit)}>
@@ -113,7 +125,9 @@ const SearchPopup = () => {
             <div
               className="form-time-wrap"
               onClick={() => {
-                if (watch("startDate").toISOString() !== watch("endDate").toISOString()) alert("동일한 날짜에만 시간 조회가 가능합니다.");
+                if (!(checkDate.startDate && checkDate.endDate)) alert("날짜를 먼저 선택해주세요.");
+                else if (watch("startDate").toISOString() !== watch("endDate").toISOString())
+                  alert("동일한 날짜에만 시간 조회가 가능합니다.");
               }}
             >
               <input type="time" id="start-time" {...register("startTime")} max={watch("endTime")} />
@@ -158,16 +172,18 @@ const SearchPopup = () => {
           )}
         </SearchFormDistrict>
 
-        <button
-          type="button"
-          onClick={() => {
-            reset({ districtNames: [], startDate: new Date(), endDate: new Date(), title: "", startTime: "", endTime: "" });
-            setCheckDate({ startDate: false, endDate: false });
-          }}
-        >
-          초기화
-        </button>
-        <button type="submit">검색하기</button>
+        <SubmitBtnBox>
+          <button
+            type="button"
+            onClick={() => {
+              reset({ districtNames: [], startDate: new Date(), endDate: new Date(), title: "", startTime: "", endTime: "" });
+              setCheckDate({ startDate: false, endDate: false });
+            }}
+          >
+            초기화
+          </button>
+          <button type="submit">검색하기</button>
+        </SubmitBtnBox>
       </SearchForm>
     </SearchPopupWrap>
   );
@@ -181,6 +197,8 @@ const SearchPopupWrap = styled.section`
   height: 100%;
   background: #fff;
   z-index: 9999;
+  overflow: auto;
+  padding-bottom: 100px;
 `;
 
 const CloseBtn = styled.button`
@@ -506,6 +524,31 @@ const SearchFormDistrict = styled.div`
         color: #fff;
       }
     }
+  }
+`;
+
+const SubmitBtnBox = styled.div`
+  display: flex;
+  flex-direction: row !important;
+  justify-content: center !important;
+  border-radius: 0 !important;
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  gap: 10px;
+
+  button {
+    padding: 10px;
+    border-radius: 10px;
+    color: #fff;
+  }
+
+  button:first-child {
+    background: #999;
+  }
+
+  button:last-child {
+    background: ${COLORS.MainColor};
   }
 `;
 

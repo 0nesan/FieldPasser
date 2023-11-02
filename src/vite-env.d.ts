@@ -52,3 +52,7 @@ interface BOARD_PARAMS_TYPE {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [props: string]: any;
 }
+
+interface INFINITYSCROLL_PROPS_TYPE {
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+}
