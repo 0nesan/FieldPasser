@@ -5,11 +5,11 @@ interface CATEGORY_ICON_PROPS_TYPES {
   size?: number;
 }
 interface CATEGORY_BTN_COLORS_TYPE {
-  futsal: string;
-  soccer: string;
-  basketball: string;
-  badminton: string;
-  tennis: string;
+  풋살장: string;
+  축구장: string;
+  농구장: string;
+  배드민턴장: string;
+  테니스장: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [prop: string]: any;
 }
@@ -54,5 +54,6 @@ interface BOARD_PARAMS_TYPE {
 }
 
 interface INFINITYSCROLL_PROPS_TYPE {
+  page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
 }

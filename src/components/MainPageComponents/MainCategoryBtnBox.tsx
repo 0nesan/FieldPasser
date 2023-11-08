@@ -10,11 +10,11 @@ const MainCategoryBtnBox = () => {
   const dispatch: AppDispatch = useDispatch();
 
   const [selectBtnColors, setSelectBtnColors] = useState<CATEGORY_BTN_COLORS_TYPE>({
-    futsal: COLORS.MainColor,
-    soccer: "#00000099",
-    basketball: "#00000099",
-    badminton: "#00000099",
-    tennis: "#00000099",
+    풋살장: COLORS.MainColor,
+    축구장: "#00000099",
+    농구장: "#00000099",
+    배드민턴장: "#00000099",
+    테니스장: "#00000099",
   });
 
   const selectBtnColorHandler = (category: string) => {
@@ -23,10 +23,10 @@ const MainCategoryBtnBox = () => {
   };
 
   useEffect(() => {
-    if (selectBtnColors.futsal === COLORS.MainColor) {
-      dispatch(fetchBoardList({ params: { categoryName: "풋살장" }, page: 1 }));
+    for (const key in selectBtnColors) {
+      if (selectBtnColors[key] === COLORS.MainColor) dispatch(fetchBoardList({ params: { categoryName: key }, page: 1 }));
     }
-  }, [selectBtnColors.futsal, dispatch]);
+  }, [selectBtnColors, dispatch]);
 
   return (
     <CategoryBtnBox>
@@ -34,60 +34,55 @@ const MainCategoryBtnBox = () => {
         <li>
           <CategoryBtn
             onClick={() => {
-              selectBtnColorHandler("futsal");
-              dispatch(fetchBoardList({ params: { categoryName: "풋살장" }, page: 1 }));
+              selectBtnColorHandler("풋살장");
             }}
-            $textcolor={selectBtnColors.futsal}
+            $textcolor={selectBtnColors.풋살장}
           >
-            <FutsalIcon color={selectBtnColors.futsal} size={24} />
+            <FutsalIcon color={selectBtnColors.풋살장} size={24} />
             <span>풋살</span>
           </CategoryBtn>
         </li>
         <li>
           <CategoryBtn
             onClick={() => {
-              selectBtnColorHandler("soccer");
-              dispatch(fetchBoardList({ params: { categoryName: "축구장" }, page: 1 }));
+              selectBtnColorHandler("축구장");
             }}
-            $textcolor={selectBtnColors.soccer}
+            $textcolor={selectBtnColors.축구장}
           >
-            <SoccerIcon color={selectBtnColors.soccer} size={24} />
+            <SoccerIcon color={selectBtnColors.축구장} size={24} />
             <span>축구</span>
           </CategoryBtn>
         </li>
         <li>
           <CategoryBtn
             onClick={() => {
-              selectBtnColorHandler("basketball");
-              dispatch(fetchBoardList({ params: { categoryName: "농구장" }, page: 1 }));
+              selectBtnColorHandler("농구장");
             }}
-            $textcolor={selectBtnColors.basketball}
+            $textcolor={selectBtnColors.농구장}
           >
-            <BasketballIcon color={selectBtnColors.basketball} size={24} />
+            <BasketballIcon color={selectBtnColors.농구장} size={24} />
             <span>농구</span>
           </CategoryBtn>
         </li>
         <li>
           <CategoryBtn
             onClick={() => {
-              selectBtnColorHandler("badminton");
-              dispatch(fetchBoardList({ params: { categoryName: "배드민턴장" }, page: 1 }));
+              selectBtnColorHandler("배드민턴장");
             }}
-            $textcolor={selectBtnColors.badminton}
+            $textcolor={selectBtnColors.배드민턴장}
           >
-            <BadmintonIcon color={selectBtnColors.badminton} size={24} />
+            <BadmintonIcon color={selectBtnColors.배드민턴장} size={24} />
             <span>배드민턴</span>
           </CategoryBtn>
         </li>
         <li>
           <CategoryBtn
             onClick={() => {
-              selectBtnColorHandler("tennis");
-              dispatch(fetchBoardList({ params: { categoryName: "테니스장" }, page: 1 }));
+              selectBtnColorHandler("테니스장");
             }}
-            $textcolor={selectBtnColors.tennis}
+            $textcolor={selectBtnColors.테니스장}
           >
-            <TennisIcon color={selectBtnColors.tennis} size={24} />
+            <TennisIcon color={selectBtnColors.테니스장} size={24} />
             <span>테니스</span>
           </CategoryBtn>
         </li>

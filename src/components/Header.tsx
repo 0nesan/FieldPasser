@@ -63,7 +63,7 @@ const Container = styled.header`
   align-items: center;
   height: 60px;
   padding: 12px 20px;
-  border: 1px solid rgb(217, 217, 217);
+  border-bottom: 1px solid rgb(217, 217, 217);
 
   section {
     display: flex;

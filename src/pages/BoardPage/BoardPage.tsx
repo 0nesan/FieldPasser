@@ -8,14 +8,13 @@ const BoardPage = () => {
       <BoardSearchBox />
       <BoardBox />
     </Container>
-  )
-}
+  );
+};
 
 const Container = styled.main`
   display: block;
   font-size: 16px;
   margin: auto;
-  max-width: 1024px;
-`
+`;
 
 export default BoardPage;

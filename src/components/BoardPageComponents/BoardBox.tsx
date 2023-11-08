@@ -1,40 +1,32 @@
 import styled from "styled-components";
 import BoardItem from "./BoardItem";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "../../store/store";
-import { useEffect, useState } from "react";
-import { fetchBoardList } from "../../store/boardListDataSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 import { useLocation } from "react-router-dom";
 import useInfinityScroll from "../../hooks/useInfinityScroll";
+import { useEffect, useState } from "react";
 
 const BoardBox = () => {
-  const dispatch: AppDispatch = useDispatch();
   const location = useLocation();
   const path = location.pathname;
+  const [page, setPage] = useState(1);
 
-  const mainBoardListData = useSelector((state: RootState) => state.boardList.boardData);
-  const mainBoardListStatus = useSelector((state: RootState) => state.boardList.status);
+  const boardListData = useSelector((state: RootState) => state.boardList.boardData);
+  const boardListPrams = useSelector((state: RootState) => state.boardList.params);
 
-  // const [payload, setPayload] = useState<BOARD_PARAMS_TYPE>({ categoryName: "풋살장" });
-  const [page, setPage] = useState<number>(1);
-  const { boardListLast, isLoading, ref, getPostList } = useInfinityScroll({ setPage });
-
-  // useEffect(() => {
-  //   if (mainBoardListStatus === "idle" && path === "/" && page === 1) {
-  //     dispatch(fetchBoardList({ params: , page: 1 }));
-  //   }
-  // }, [mainBoardListStatus, dispatch, path, page]);
+  const { isLoading, getPostList, ref } = useInfinityScroll({ page, setPage });
 
   useEffect(() => {
-    !boardListLast && getPostList(page);
-  }, [page, getPostList, boardListLast]);
+    getPostList(boardListPrams);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getPostList]);
 
   return (
     <BoardWrap>
-      {mainBoardListData && mainBoardListData.length > 0 ? (
+      {boardListData && boardListData.length > 0 ? (
         <>
           <BoardListWrap $pathname={path}>
-            {mainBoardListData.map((item: POST_TYPE, idx: number) => (
+            {boardListData.map((item: POST_TYPE, idx: number) => (
               <BoardItem list={item} key={idx} />
             ))}
           </BoardListWrap>
