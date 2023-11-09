@@ -1,15 +1,17 @@
-import styled from "styled-components"
+import styled from "styled-components";
+import BoardDetailContentsBox from "../../components/BoardDetailPageComponents/BoardDetailContentsBox";
 
 const BoardDetailPage = () => {
   return (
     <Container>
-      <div className="게시글 내용 컴포넌트"></div>
-      <div className="댓글 내용 컴포넌트"></div>
+      <BoardDetailContentsBox />
     </Container>
-  )
-}
+  );
+};
 
 const Container = styled.main`
-`
+  max-width: 794px;
+  margin: 32px auto 0;
+`;
 
-export default BoardDetailPage
+export default BoardDetailPage;

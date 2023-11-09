@@ -12,14 +12,13 @@ const BoardBox = () => {
   const [page, setPage] = useState(1);
 
   const boardListData = useSelector((state: RootState) => state.boardList.boardData);
-  const boardListPrams = useSelector((state: RootState) => state.boardList.params);
+  const boardListPrams = useSelector((state: RootState) => state.boardListParams.boardListParams);
 
-  const { isLoading, getPostList, ref } = useInfinityScroll({ page, setPage });
+  const { isLoading, getPostList, ref } = useInfinityScroll({ boardListPrams, setPage });
 
   useEffect(() => {
-    getPostList(boardListPrams);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getPostList]);
+    getPostList(boardListPrams, page);
+  }, [getPostList, page, boardListPrams]);
 
   return (
     <BoardWrap>
@@ -30,7 +29,7 @@ const BoardBox = () => {
               <BoardItem list={item} key={idx} />
             ))}
           </BoardListWrap>
-          {!isLoading && <div ref={ref}></div>}
+          {!isLoading && <div style={{ height: "10px" }} ref={ref}></div>}
         </>
       ) : (
         <ErrorComponent>게시글이 없습니다.</ErrorComponent>

@@ -79,6 +79,7 @@ const Container = styled.header`
         height: 24px;
         background-image: url("./logo.png");
         background-size: cover;
+        background-color: #ddd;
 
         a {
           text-indent: -9999px;

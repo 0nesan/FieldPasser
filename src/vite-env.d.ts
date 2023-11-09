@@ -1,8 +1,9 @@
 /// <reference types="vite/client" />
 
 interface CATEGORY_ICON_PROPS_TYPES {
-  color?: string;
   size?: number;
+  fill?: string;
+  stroke?: string;
 }
 interface CATEGORY_BTN_COLORS_TYPE {
   풋살장: string;
@@ -54,6 +55,6 @@ interface BOARD_PARAMS_TYPE {
 }
 
 interface INFINITYSCROLL_PROPS_TYPE {
-  page: number;
+  boardListPrams: BOARD_PARAMS_TYPE;
   setPage: React.Dispatch<React.SetStateAction<number>>;
 }

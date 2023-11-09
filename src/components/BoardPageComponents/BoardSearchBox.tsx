@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 
 const BoardSearchBox = () => {
-  const boardListPrams = useSelector((state: RootState) => state.boardList.params);
+  const boardListPrams = useSelector((state: RootState) => state.boardListParams.boardListParams);
 
   return (
     <BoardSearchBoxWrap>

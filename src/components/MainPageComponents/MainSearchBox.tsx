@@ -6,8 +6,8 @@ import { modalToggle } from "../../store/modalStateSlice";
 const MainSearchBox = () => {
   const dispatch = useDispatch();
   return (
-    <MainSearchBoxWrap onClick={() => dispatch(modalToggle("searchModal"))}>
-      <div>
+    <MainSearchBoxWrap>
+      <div onClick={() => dispatch(modalToggle("searchModal"))}>
         <SearchIcon size={24} />
         <MainSearchBoxText>
           <p>어떤 구장을 찾으세요?</p>

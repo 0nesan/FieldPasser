@@ -5,6 +5,7 @@ import { COLORS } from "../../css/GlobalStyle";
 import { fetchBoardList } from "../../store/boardListDataSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/store";
+import { boardListParams } from "../../store/boardListParamsSlice";
 
 const MainCategoryBtnBox = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -24,7 +25,10 @@ const MainCategoryBtnBox = () => {
 
   useEffect(() => {
     for (const key in selectBtnColors) {
-      if (selectBtnColors[key] === COLORS.MainColor) dispatch(fetchBoardList({ params: { categoryName: key }, page: 1 }));
+      if (selectBtnColors[key] === COLORS.MainColor) {
+        dispatch(fetchBoardList({ params: { categoryName: key }, page: 1 }));
+        dispatch(boardListParams({ categoryName: key }));
+      }
     }
   }, [selectBtnColors, dispatch]);
 
@@ -38,7 +42,7 @@ const MainCategoryBtnBox = () => {
             }}
             $textcolor={selectBtnColors.풋살장}
           >
-            <FutsalIcon color={selectBtnColors.풋살장} size={24} />
+            <FutsalIcon fill={selectBtnColors.풋살장} size={24} />
             <span>풋살</span>
           </CategoryBtn>
         </li>
@@ -49,7 +53,7 @@ const MainCategoryBtnBox = () => {
             }}
             $textcolor={selectBtnColors.축구장}
           >
-            <SoccerIcon color={selectBtnColors.축구장} size={24} />
+            <SoccerIcon fill={selectBtnColors.축구장} size={24} />
             <span>축구</span>
           </CategoryBtn>
         </li>
@@ -60,7 +64,7 @@ const MainCategoryBtnBox = () => {
             }}
             $textcolor={selectBtnColors.농구장}
           >
-            <BasketballIcon color={selectBtnColors.농구장} size={24} />
+            <BasketballIcon fill={selectBtnColors.농구장} size={24} />
             <span>농구</span>
           </CategoryBtn>
         </li>
@@ -71,7 +75,7 @@ const MainCategoryBtnBox = () => {
             }}
             $textcolor={selectBtnColors.배드민턴장}
           >
-            <BadmintonIcon color={selectBtnColors.배드민턴장} size={24} />
+            <BadmintonIcon fill={selectBtnColors.배드민턴장} size={24} />
             <span>배드민턴</span>
           </CategoryBtn>
         </li>
@@ -82,7 +86,7 @@ const MainCategoryBtnBox = () => {
             }}
             $textcolor={selectBtnColors.테니스장}
           >
-            <TennisIcon color={selectBtnColors.테니스장} size={24} />
+            <TennisIcon stroke={selectBtnColors.테니스장} size={24} />
             <span>테니스</span>
           </CategoryBtn>
         </li>

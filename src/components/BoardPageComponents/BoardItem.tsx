@@ -32,7 +32,7 @@ const BoardItem: React.FC<BoardItemsProps> = ({ list }) => {
           <span>조회수</span>
           <span>{list.viewCount}</span>
           <span>
-            <Harticon size={16} />
+            <Harticon size={13} fill="#fff" stroke="#aaa" />
           </span>
           <span>{list.wishCount}</span>
         </p>
