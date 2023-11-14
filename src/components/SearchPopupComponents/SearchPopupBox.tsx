@@ -48,7 +48,6 @@ const SearchPopup = () => {
     return dispatch(fetchBoardList({ params: data, page: 1 })), dispatch(boardListParams(data)), navigate("/board");
   };
 
-  console.log(watch());
   return (
     <SearchPopupWrap>
       <SearchForm onSubmit={handleSubmit(onSubmit)}>

@@ -10,26 +10,25 @@ const BoardBox = () => {
   const location = useLocation();
   const path = location.pathname;
   const [page, setPage] = useState(1);
-
   const boardListData = useSelector((state: RootState) => state.boardList.boardData);
-  const boardListPrams = useSelector((state: RootState) => state.boardListParams.boardListParams);
+  const boardListParams = useSelector((state: RootState) => state.boardListParams.boardListParams);
 
-  const { isLoading, getPostList, ref } = useInfinityScroll({ boardListPrams, setPage });
+  const { lastPage, isLoading, getPostList, ref } = useInfinityScroll({ boardListParams, setPage });
 
   useEffect(() => {
-    getPostList(boardListPrams, page);
-  }, [getPostList, page, boardListPrams]);
+    if (page > 1) getPostList(boardListParams, page);
+  }, [getPostList, boardListParams, page]);
 
   return (
     <BoardWrap>
-      {boardListData && boardListData.length > 0 ? (
+      {boardListData.length > 0 ? (
         <>
           <BoardListWrap $pathname={path}>
             {boardListData.map((item: POST_TYPE, idx: number) => (
               <BoardItem list={item} key={idx} />
             ))}
           </BoardListWrap>
-          {!isLoading && <div style={{ height: "10px" }} ref={ref}></div>}
+          {!isLoading && !lastPage && <div style={{ height: "10px" }} ref={ref}></div>}
         </>
       ) : (
         <ErrorComponent>게시글이 없습니다.</ErrorComponent>

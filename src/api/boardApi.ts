@@ -6,7 +6,7 @@ export const getPostList = async ({ params, page }: GET_BOARD_LIST_PARAMS_TYPES)
   });
 };
 
-export const getPostDetail = async (boardId: number) => {
+export const getPostDetail = async (boardId: string) => {
   return await PUBLICAPI.get(`/detail/${boardId}`).then((res) => {
     return res.data.data;
   });

@@ -12,7 +12,8 @@ const App = () => {
   const modalState = useSelector((state: RootState) => state.modalState);
 
   useEffect(() => {
-    modalState.modalState.searchModal ? document.body.classList.add("non-scroll") : document.body.classList.remove("non-scroll");
+    if (modalState.modalState.searchModal) return document.body.classList.add("non-scroll"), window.scrollTo(0, 0);
+    return document.body.classList.remove("non-scroll");
   }, [modalState.modalState.searchModal]);
 
   return (

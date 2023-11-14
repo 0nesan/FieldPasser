@@ -7,8 +7,8 @@ export const fetchBoardList = createAsyncThunk("board/fetchBoardListStatus", asy
     const page = params.page === 1;
     const response = await getPostList(params);
     return [response, response.last, page];
-  } catch (err) {
-    return thunkAPI.rejectWithValue(err);
+  } catch (error) {
+    return thunkAPI.rejectWithValue({ error: "요청을 실패했습니다 다시 시도해주세요." });
   }
 });
 
@@ -16,14 +16,12 @@ interface boardListDataSliceTypes {
   boardData: POST_TYPE[];
   status: string;
   lastPage: boolean;
-  firstPage: boolean;
 }
 
 const initialState: boardListDataSliceTypes = {
   boardData: [],
   status: "idle",
   lastPage: false,
-  firstPage: true,
 };
 
 const mainBoardListSlice = createSlice({

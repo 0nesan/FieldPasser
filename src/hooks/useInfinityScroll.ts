@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchBoardList } from "../store/boardListDataSlice";
 import { RootState } from "../store/store";
 
-const useInfinityScroll = ({ boardListPrams, setPage }: INFINITYSCROLL_PROPS_TYPE) => {
+const useInfinityScroll = ({ boardListParams, setPage }: INFINITYSCROLL_PROPS_TYPE) => {
   const dispatch: AppDispatch = useDispatch();
   const [ref, inView] = useInView();
   const [isLoading, setIsLoading] = useState(false);
@@ -13,22 +13,17 @@ const useInfinityScroll = ({ boardListPrams, setPage }: INFINITYSCROLL_PROPS_TYP
   const lastPage = useSelector((state: RootState) => state.boardList.lastPage);
 
   const getPostList = useCallback(
-    async (params: BOARD_PARAMS_TYPE, page: number) => {
-      try {
-        setIsLoading(true);
-        await dispatch(fetchBoardList({ params: params, page: page }));
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setIsLoading(false);
-      }
+    async (payload: BOARD_PARAMS_TYPE, page: number) => {
+      setIsLoading(true);
+      await dispatch(fetchBoardList({ params: payload, page: page }));
+      setIsLoading(false);
     },
     [dispatch]
   );
 
   useEffect(() => {
     setPage(1);
-  }, [boardListPrams, setPage]);
+  }, [boardListParams, setPage]);
 
   useEffect(() => {
     if (inView && !lastPage) {
@@ -36,7 +31,7 @@ const useInfinityScroll = ({ boardListPrams, setPage }: INFINITYSCROLL_PROPS_TYP
     }
   }, [inView, lastPage, setPage]);
 
-  return { isLoading, getPostList, ref };
+  return { lastPage, isLoading, getPostList, ref };
 };
 
 export default useInfinityScroll;

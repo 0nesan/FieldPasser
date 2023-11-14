@@ -15,10 +15,10 @@ const BoardDetailContentsBox = () => {
   const getDetailData = useCallback(async () => {
     try {
       setLoading(true);
-      const postData = await getPostDetail(Number(location.id));
+      const postData = await getPostDetail(location.id as string);
       setDetailData(postData);
     } catch (err) {
-      console.log(err);
+      if (err instanceof Error) return err.message;
     } finally {
       setLoading(false);
     }

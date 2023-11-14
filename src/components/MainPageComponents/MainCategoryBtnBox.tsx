@@ -19,6 +19,8 @@ const MainCategoryBtnBox = () => {
   });
 
   const selectBtnColorHandler = (category: string) => {
+    if (selectBtnColors[category] === COLORS.MainColor) return;
+
     for (const key in selectBtnColors) selectBtnColors[key] = "#00000099";
     return setSelectBtnColors({ ...selectBtnColors, [category]: COLORS.MainColor });
   };

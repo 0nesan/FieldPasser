@@ -55,6 +55,6 @@ interface BOARD_PARAMS_TYPE {
 }
 
 interface INFINITYSCROLL_PROPS_TYPE {
-  boardListPrams: BOARD_PARAMS_TYPE;
+  boardListParams: BOARD_PARAMS_TYPE;
   setPage: React.Dispatch<React.SetStateAction<number>>;
 }
